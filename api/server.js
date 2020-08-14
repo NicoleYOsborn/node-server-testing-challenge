@@ -1,6 +1,6 @@
 const express = require("express");
 
-const milkshakes = require("../milkshakes/milkshakesModel.js");
+const milkshakes = require("../milkshakes/milkshakeModel.js");
 
 const server = express();
 

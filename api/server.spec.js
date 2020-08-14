@@ -48,6 +48,9 @@ const db = require("../data/dbConfig")
         
 //     });
 // });
+beforeEach(async ()=>{
+    await db.seed.run()
+})
 
 afterAll(async ()=>{
     await db.destroy()
@@ -72,9 +75,25 @@ describe('milkshake integration tests', ()=>{
         expect(res.headers["content-type"]).toBe("application/json; charset=utf-8")
         expect(res.body.flavor).toBe("strawberry")
     })
-    // it("POST /milkshakes", async ()=>{
-    //     const res = await request(server).post("/milkshakes")
-
-    // })
+    it("GET /milkshakes/:id (not found", async ()=>{
+        const res = await request(server).get("/milkshakes/50")
+        expect(res.statusCode).toBe(404)
+        expect(res.headers["content-type"]).toBe("application/json; charset=utf-8")
+        expect(res.body.message).toBe("could not find milkshake with given id")
+    })
+    it("POST /milkshakes", async ()=>{
+        const res = await request(server)
+            .post("/milkshakes")
+            .send({flavor: "mint oreo"})
+        expect(res.statusCode).toBe(201)
+        expect(res.headers["content-type"]).toBe("application/json; charset=utf-8")
+        expect(res.body.id).toBeDefined()
+        expect(res.body.flavor).toBe("mint oreo")
+    })
+    it("POST /milkshakes (failed)", async ()=>{
+        const res = await request(server).post("/milkshakes").send({})
+        expect(res.statusCode).toBe(500)
+        expect(res.body.message).toBe("failed to insert new flavor")
+    })
 
 })

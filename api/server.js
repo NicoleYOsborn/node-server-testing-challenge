@@ -1,6 +1,6 @@
 const express = require("express");
 
-const milkshakes = require("../milkshakes/milkshakeModel.js");
+const Milkshakes = require("../milkshakes/milkshakeModel.js");
 
 const server = express();
 
@@ -11,7 +11,7 @@ server.get("/", (req, res) => {
 });
 
 server.get("/milkshakes", (req, res) => {
-  milkshakes.getAll()
+  Milkshakes.getAll()
     .then(milkshakes => {
       res.status(200).json(milkshakes);
     })
@@ -19,5 +19,31 @@ server.get("/milkshakes", (req, res) => {
       res.status(500).json(error);
     });
 });
+
+server.get("/milkshakes/:id", (req, res)=>{
+    const { id } = req.params;
+    Milkshakes.findById(id)
+    .then(milkshake =>{
+       if(milkshake) {
+           res.status(200).json(milkshake)
+       } else {
+           res.status(404).json({message: 'could not find milkshake with given id'})
+       }
+    })
+    .catch(err =>{
+        res.status(500).json({message: 'failed to get milkshakes'})
+    })
+})
+
+server.post("/milkshakes", (req, res)=>{
+    const milkshake = req.body
+    Milkshakes.insert(milkshake)
+    .then(milkshake =>{
+        res.status(201).json(milkshake)
+    })
+    .catch(err =>{
+        res.status(500).json({message: 'failed to insert new flavor'});
+    })
+})
 
 module.exports = server;

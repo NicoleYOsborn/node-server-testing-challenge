@@ -14,11 +14,12 @@ async function insert(milkshake) {
 }
 
 async function update(id, changes) {
+
   return null;
 }
 
 function remove(id) {
-  return null;
+   return db('milkshakes').where({id}).del();
 }
 
 function getAll() {
@@ -26,5 +27,7 @@ function getAll() {
 }
 
 function findById(id) {
-  return null;
+  return db('milkshakes')
+  .where({id})
+  .first();
 }

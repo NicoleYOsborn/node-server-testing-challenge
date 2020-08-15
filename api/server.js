@@ -65,4 +65,19 @@ server.put("/milkshakes/:id", (req, res)=>{
         })
 })
 
+server.delete("/milkshakes/:id", (req, res)=>{
+    const { id } = req.params;
+    Milkshakes.remove(id)
+    .then(deleted =>{
+        if(deleted) {
+            res.status(200).json({removed: deleted});
+        } else {
+            res.status(404).json({message: "could not find milkshake with given id"})
+        }
+    })
+    .catch(err =>{
+        res.status(500).json({ message: 'failed to delete milkshake'});
+    });
+})
+
 module.exports = server;

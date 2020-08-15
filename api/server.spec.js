@@ -111,5 +111,21 @@ describe('milkshake integration tests', ()=>{
         expect(res.headers["content-type"]).toBe("application/json; charset=utf-8")
         expect(res.body.message).toBe("unable to find milkshake to update")
     })
+    it("DELETE /milkshakes/id", async ()=>{
+        const res = await request(server)
+        .delete("/milkshakes/2")
+        .send()
+    expect(res.statusCode).toBe(200)
+    expect(res.headers["content-type"]).toBe("application/json; charset=utf-8")
+    expect(res.body.removed).toBe(1)
+    })
+    it("DELETE /milkshakes/id (failed)", async ()=>{
+        const res = await request(server)
+        .delete("/milkshakes/45")
+        .send()
+    expect(res.statusCode).toBe(404)
+    expect(res.headers["content-type"]).toBe("application/json; charset=utf-8")
+    expect(res.body.message).toBe("could not find milkshake with given id")
+    })
 
 })

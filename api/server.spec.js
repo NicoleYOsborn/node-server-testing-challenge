@@ -95,5 +95,21 @@ describe('milkshake integration tests', ()=>{
         expect(res.statusCode).toBe(500)
         expect(res.body.message).toBe("failed to insert new flavor")
     })
+    it("PUT /milkshakes/:id", async ()=>{
+        const res = await request(server)
+            .put("/milkshakes/1")
+            .send({flavor: "strawberry cream"})
+        expect(res.statusCode).toBe(201)
+        expect(res.headers["content-type"]).toBe("application/json; charset=utf-8")
+        expect(res.body.flavor).toBe("strawberry cream")
+    })
+    it("PUT /milkshakes/:id (failed)", async ()=>{
+        const res = await request(server)
+            .put("/milkshakes/70")
+            .send({flavor: "strawberry cream"})
+        expect(res.statusCode).toBe(404)
+        expect(res.headers["content-type"]).toBe("application/json; charset=utf-8")
+        expect(res.body.message).toBe("unable to find milkshake to update")
+    })
 
 })

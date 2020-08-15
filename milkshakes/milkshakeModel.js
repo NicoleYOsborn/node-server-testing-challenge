@@ -14,8 +14,10 @@ async function insert(milkshake) {
 }
 
 async function update(id, changes) {
-
-  return null;
+    return db('milkshakes').where({id}).update(changes)
+        .then(count =>{
+            return findById(id);
+        })
 }
 
 function remove(id) {

@@ -46,4 +46,23 @@ server.post("/milkshakes", (req, res)=>{
     })
 })
 
+server.put("/milkshakes/:id", (req, res)=>{
+    const {id} = req.params;
+    const changes = req.body;
+    Milkshakes.findById(id)
+        .then(milkshake =>{
+            if(milkshake){
+                Milkshakes.update(id, changes)
+                .then(updated =>{
+                    res.status(201).json(updated)
+                });
+            }else{
+                res.status(404).json({message: "unable to find milkshake to update"})
+            }
+        })
+        .catch(err =>{
+            res.status(500).json({message: "Failed to update milkshake"})
+        })
+})
+
 module.exports = server;
